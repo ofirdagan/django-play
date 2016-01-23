@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="djangoiTunes">
+<head>
+  <meta charset="UTF-8">
+  <title>Django iTunes</title>
+</head>
+<body>
+<div ng-controller="MainCtrl as main">
+  <ul>
+    <li ng-repeat="artist in main.artists track by artist.id">{{artist.name}}</li>
+  </ul>
+  <form>
+    <input type="text" ng-model="main.artist" />
+    <input type="submit" ng-click="main.submit()" value="Add" />
+  </form>
+</div>
+
+
+{% load compress %}
+{% load staticfiles %}
+
+{% compress js %}
+<script type="text/javascript" src="{% static 'bower_components/jquery/dist/jquery.js' %}"></script>
+<script type="text/javascript" src="{% static 'bower_components/angular/angular.js' %}"></script>
+<script type="text/javascript" src="{% static 'app/scripts/app.js' %}"></script>
+<script type="text/javascript" src="{% static 'app/scripts/controllers/main.js' %}"></script>
+<script type="text/javascript" src="{% static 'app/scripts/services/i-tunes-api.js' %}"></script>
+{% endcompress %}
+
+
+</body>
+</html>
