@@ -18,14 +18,19 @@ from django.conf.urls import include
 from django.contrib import admin
 from spa.views import IndexView
 from artists.views import ArtistViewSet
+from albums.views import ArtistAlbumsViewSet
 from rest_framework.routers import SimpleRouter
+from rest_framework_nested import routers
 
 router = SimpleRouter()
 router.register(r'artists', ArtistViewSet)
+artists_router = routers.NestedSimpleRouter(router, r'artists', lookup='artist')
+artists_router.register(r'albums', ArtistAlbumsViewSet)
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^api/v1/', include(router.urls)),
+    url(r'^api/v1/', include(artists_router.urls)),
     # url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
-    url('^.*$', IndexView.as_view(), name='index'),
+    # url('^.*$', IndexView.as_view(), name='index'),
 ]

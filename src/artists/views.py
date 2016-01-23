@@ -2,6 +2,7 @@ from django.shortcuts import render
 
 from rest_framework import viewsets
 from .models import Artist
+from albums.models import Album
 from .serializers import ArtistSerializer
 from rest_framework.decorators import detail_route
 from rest_framework.response import Response
@@ -19,9 +20,17 @@ class ArtistViewSet(viewsets.ModelViewSet):
     # @detail_route(methods=['get'], url_path='bla')
     def create(self, request):
         name = request.data['name']
-        url = "https://itunes.apple.com/search?term=%(artist)&media=music&entity=album".format(artist=name)
-        albums = urllib2.urlopen(url).read()
-        jsonObj = json.loads(albums)
+        itunesUrl = "https://itunes.apple.com/search?term={artist}&media=music&entity=album&limit=2".format(artist=urllib2.quote(name))
+        result = urllib2.urlopen(itunesUrl).read()
+        albums = json.loads(result)
 
-        logger.error(albums)
-        return Response({'artist': name, 'results': jsonObj['resultCount']}, status=status.HTTP_201_CREATED)
+        if albums["resultCount"] == 0:
+            return Response({'success': False}, status=status.HTTP_204_NO_CONTENT)
+        else:
+            artist = Artist(name=name)
+            artist.save()
+            for album in albums["results"]:
+                album = Album(name=album["collectionName"], imageUrl=album["artworkUrl100"], artist=artist)
+                album.save()
+
+            return Response({'success': True, 'artist': name, 'results': albums['resultCount']}, status=status.HTTP_201_CREATED)
