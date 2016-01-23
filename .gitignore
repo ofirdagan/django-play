@@ -1,0 +1,8 @@
+.idea
+bin
+include
+lib
+share
+pip-selfcheck.json
+.Python
+src/client/bower_components
