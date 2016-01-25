@@ -6,3 +6,4 @@ share
 pip-selfcheck.json
 .Python
 src/client/bower_components
+src/db.sqlite3
