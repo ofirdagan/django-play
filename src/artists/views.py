@@ -25,12 +25,15 @@ class ArtistViewSet(viewsets.ModelViewSet):
         albums = json.loads(result)
 
         if albums["resultCount"] == 0:
-            return Response({'success': False},status=status.HTTP_200_OK)
+            return Response({'success': False}, status=status.HTTP_200_OK)
         else:
             artist = Artist(name=name)
             artist.save()
             for album in albums["results"]:
-                album = Album(name=album["collectionName"], imageUrl=album["artworkUrl100"], artist=artist)
+                album = Album(name=album["collectionName"],
+                              imageUrl=album["artworkUrl100"],
+                              releaseDate=album["releaseDate"],
+                              artist=artist)
                 album.save()
 
             return Response({'success': True, 'artist': name, 'results': albums['resultCount']}, status=status.HTTP_201_CREATED)

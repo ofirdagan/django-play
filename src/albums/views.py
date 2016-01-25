@@ -10,7 +10,7 @@ from rest_framework.response import Response
 
 class ArtistAlbumsViewSet(viewsets.ModelViewSet):
 
-    queryset = Album.objects.select_related('artist').all()
+    queryset = Album.objects.select_related('artist').all().order_by('-release_date')
     serializer_class = AlbumSerializer
 
     def list(self, request, artist_pk=None):
