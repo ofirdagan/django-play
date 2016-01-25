@@ -32,5 +32,5 @@ urlpatterns = [
     url(r'^api/v1/', include(router.urls)),
     url(r'^api/v1/', include(artists_router.urls)),
     # url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
-    # url('^.*$', IndexView.as_view(), name='index'),
+    url('^.*$', IndexView.as_view(), name='index'),
 ]

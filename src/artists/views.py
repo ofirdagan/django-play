@@ -20,12 +20,12 @@ class ArtistViewSet(viewsets.ModelViewSet):
     # @detail_route(methods=['get'], url_path='bla')
     def create(self, request):
         name = request.data['name']
-        itunesUrl = "https://itunes.apple.com/search?term={artist}&media=music&entity=album&limit=2".format(artist=urllib2.quote(name))
+        itunesUrl = "https://itunes.apple.com/search?term={artist}&media=music&entity=album".format(artist=urllib2.quote(name))
         result = urllib2.urlopen(itunesUrl).read()
         albums = json.loads(result)
 
         if albums["resultCount"] == 0:
-            return Response({'success': False}, status=status.HTTP_204_NO_CONTENT)
+            return Response({'success': False},status=status.HTTP_200_OK)
         else:
             artist = Artist(name=name)
             artist.save()
